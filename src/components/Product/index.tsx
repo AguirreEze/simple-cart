@@ -12,10 +12,6 @@ interface Iprops {
 export default function Product({ product }: Iprops) {
   const context = useContext(CartContext);
 
-  const addProductToCart = () => {
-    context.setCart([...context.cart, { product, cant: 1 }]);
-  };
-
   const updateCartPoduct = (
     cartItem: CartItemType,
     operation: "add" | "less"
@@ -25,7 +21,20 @@ export default function Product({ product }: Iprops) {
     return cartItem;
   };
 
-  const decreseProductCant = () => {
+  const addProductToCart = () => {
+    const productOnCart = context.cart.find((elem) => elem.product === product);
+    let updatedCart;
+
+    !!productOnCart
+      ? (updatedCart = context.cart.map((elem) =>
+          elem.product === product ? updateCartPoduct(elem, "add") : elem
+        ))
+      : (updatedCart = [...context.cart, { product, cant: 1 }]);
+
+    context.setCart(updatedCart);
+  };
+
+  const removeProductFromCart = () => {
     const productOnCart = context.cart.find((elem) => elem.product === product);
     let updatedCart;
 
@@ -34,14 +43,6 @@ export default function Product({ product }: Iprops) {
       : (updatedCart = context.cart.map((elem) =>
           elem.product === product ? updateCartPoduct(elem, "less") : elem
         ));
-    context.setCart(updatedCart);
-  };
-
-  const increseProductCant = () => {
-    const updatedCart = context.cart.map((elem) =>
-      elem.product === product ? updateCartPoduct(elem, "add") : elem
-    );
-
     context.setCart(updatedCart);
   };
 
@@ -54,13 +55,13 @@ export default function Product({ product }: Iprops) {
       </div>
       {context.cart.find((elem) => elem.product === product) ? (
         <div className={styles.botonera}>
-          <button className={styles.button} onClick={decreseProductCant}>
+          <button className={styles.button} onClick={removeProductFromCart}>
             -
           </button>
           <span className={styles.counter}>
             {context.cart.find((elem) => elem.product === product)?.cant}
           </span>
-          <button className={styles.button} onClick={increseProductCant}>
+          <button className={styles.button} onClick={addProductToCart}>
             +
           </button>
         </div>
