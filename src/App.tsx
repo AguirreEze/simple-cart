@@ -14,7 +14,7 @@ function App() {
 
   return (
     <main className={styles.main}>
-      <header className={styles.main}>Estampitiency</header>
+      <header className={styles.header}>Estampitiency</header>
       <section className={styles.stand}>
         {products.map((product) => (
           <Product key={product.id} product={product} />
