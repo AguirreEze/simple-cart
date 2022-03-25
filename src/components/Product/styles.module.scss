@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.image {
+  width: 100%;
+  object-fit: contain;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.description {
+  color: gray;
+}
+
+.button {
+  margin-top: auto;
+}
