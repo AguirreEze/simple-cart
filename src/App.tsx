@@ -1,10 +1,10 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 import api from "./api";
-import {Product} from "./types";
+import { ProductType } from "./types";
 
 function App() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
 
   useEffect(() => {
     api.list().then(setProducts);
@@ -30,7 +30,9 @@ function App() {
       </aside>
       <footer>
         Encontrá la consigna de este ejercicio y otros más{" "}
-        <a href="https://github.com/goncy/interview-challenges/tree/main/simple-cart">acá</a>
+        <a href="https://github.com/goncy/interview-challenges/tree/main/simple-cart">
+          acá
+        </a>
       </footer>
     </main>
   );
