@@ -2,15 +2,24 @@ import { useEffect, useState } from "react";
 
 import api from "./api";
 import Product from "./components/Product";
-import { ProductType } from "./types";
+import { ProductType, CartItemType } from "./types";
 import styles from "./styles.module.scss";
 
 function App() {
   const [products, setProducts] = useState<ProductType[]>([]);
+  const [cart, setCart] = useState<CartItemType[]>([]);
 
   useEffect(() => {
     api.list().then(setProducts);
   }, []);
+
+  const getFinalPrice = (cart: CartItemType[]): number => {
+    return !cart.length
+      ? 0
+      : cart
+          .map((elem) => elem.product.price * elem.cant)
+          .reduce((a, b) => a + b);
+  };
 
   return (
     <main className={styles.main}>
@@ -21,7 +30,9 @@ function App() {
         ))}
       </section>
       <aside className={styles.cart}>
-        <button>3 productos (total: $12)</button>
+        <button>
+          {cart.length} productos (total: ${getFinalPrice(cart)})
+        </button>
       </aside>
       <footer className={styles.footer}>
         Encontrá la consigna de este ejercicio y otros más{" "}

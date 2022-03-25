@@ -5,3 +5,8 @@ export interface ProductType {
   image: string;
   price: number;
 }
+
+export interface CartItemType {
+  product: ProductType;
+  cant: number;
+}
