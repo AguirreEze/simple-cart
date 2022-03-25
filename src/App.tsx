@@ -4,6 +4,7 @@ import api from "./api";
 import Product from "./components/Product";
 import { ProductType, CartItemType } from "./types";
 import styles from "./styles.module.scss";
+import { CartContext } from "./context";
 
 function App() {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -24,11 +25,13 @@ function App() {
   return (
     <main className={styles.main}>
       <header className={styles.header}>Estampitiency</header>
-      <section className={styles.stand}>
-        {products.map((product) => (
-          <Product key={product.id} product={product} />
-        ))}
-      </section>
+      <CartContext.Provider value={{ cart, setCart }}>
+        <section className={styles.stand}>
+          {products.map((product) => (
+            <Product key={product.id} product={product} />
+          ))}
+        </section>
+      </CartContext.Provider>
       <aside className={styles.cart}>
         <button>
           {cart.length} productos (total: ${getFinalPrice(cart)})
