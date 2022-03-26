@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
-import { CartContext } from "../../context";
-import { ProductType, CartItemType } from "../../types";
+import { CartContext, addItemToCart, removeItemFromCart } from "../../context";
+import { ProductType } from "../../types";
 
 import styles from "./styles.module.scss";
 
@@ -12,38 +12,12 @@ interface Iprops {
 export default function Product({ product }: Iprops) {
   const context = useContext(CartContext);
 
-  const updateCartPoduct = (
-    cartItem: CartItemType,
-    operation: "add" | "less"
-  ): CartItemType => {
-    operation === "add" ? cartItem.cant++ : cartItem.cant--;
-
-    return cartItem;
+  const handleRemove = () => {
+    context.setCart(removeItemFromCart(context.cart, product));
   };
 
-  const addProductToCart = () => {
-    const productOnCart = context.cart.find((elem) => elem.product === product);
-    let updatedCart;
-
-    !!productOnCart
-      ? (updatedCart = context.cart.map((elem) =>
-          elem.product === product ? updateCartPoduct(elem, "add") : elem
-        ))
-      : (updatedCart = [...context.cart, { product, cant: 1 }]);
-
-    context.setCart(updatedCart);
-  };
-
-  const removeProductFromCart = () => {
-    const productOnCart = context.cart.find((elem) => elem.product === product);
-    let updatedCart;
-
-    productOnCart?.cant === 1
-      ? (updatedCart = context.cart.filter((elem) => elem.product !== product))
-      : (updatedCart = context.cart.map((elem) =>
-          elem.product === product ? updateCartPoduct(elem, "less") : elem
-        ));
-    context.setCart(updatedCart);
+  const handleAdd = () => {
+    context.setCart(addItemToCart(context.cart, product));
   };
 
   return (
@@ -55,18 +29,18 @@ export default function Product({ product }: Iprops) {
       </div>
       {context.cart.find((elem) => elem.product === product) ? (
         <div className={styles.botonera}>
-          <button className={styles.button} onClick={removeProductFromCart}>
+          <button className={styles.button} onClick={handleRemove}>
             -
           </button>
           <span className={styles.counter}>
             {context.cart.find((elem) => elem.product === product)?.cant}
           </span>
-          <button className={styles.button} onClick={addProductToCart}>
+          <button className={styles.button} onClick={handleAdd}>
             +
           </button>
         </div>
       ) : (
-        <button className={styles.button} onClick={addProductToCart}>
+        <button className={styles.button} onClick={handleAdd}>
           Agregar
         </button>
       )}
