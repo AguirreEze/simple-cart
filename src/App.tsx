@@ -14,12 +14,12 @@ function App() {
     api.list().then(setProducts);
   }, []);
 
+  const getProductPrice = (cartItem: CartItemType) => {
+    return cartItem.product.price * cartItem.cant;
+  };
+
   const getFinalPrice = (cart: CartItemType[]): number => {
-    return !cart.length
-      ? 0
-      : cart
-          .map((elem) => elem.product.price * elem.cant)
-          .reduce((a, b) => a + b);
+    return !cart.length ? 0 : cart.reduce((a, b) => a + getProductPrice(b), 0);
   };
 
   return (
