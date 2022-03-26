@@ -2,14 +2,23 @@ import { createContext } from "react";
 
 import { CartItemType, ProductType } from "./types";
 
-interface Icontext {
+interface ActionType {
+  type: "addToCart" | "removeFromCart";
+  payload: ProductType;
+}
+
+interface StateType {
   cart: CartItemType[];
-  setCart: (value: CartItemType[]) => void;
+}
+
+interface Icontext {
+  state: { cart: CartItemType[] };
+  dispatch: (action: ActionType) => void;
 }
 
 export const CartContext = createContext<Icontext>({
-  cart: [],
-  setCart: () => {},
+  state: { cart: [] },
+  dispatch: () => {},
 });
 
 const updateCartPoduct = (
@@ -21,7 +30,7 @@ const updateCartPoduct = (
   return cartItem;
 };
 
-export const addItemToCart = (cart: CartItemType[], product: ProductType) => {
+const addItemToCart = (cart: CartItemType[], product: ProductType) => {
   const productOnCart = cart.find((elem) => elem.product === product);
   let updatedCart;
 
@@ -34,10 +43,7 @@ export const addItemToCart = (cart: CartItemType[], product: ProductType) => {
   return updatedCart;
 };
 
-export const removeItemFromCart = (
-  cart: CartItemType[],
-  product: ProductType
-) => {
+const removeItemFromCart = (cart: CartItemType[], product: ProductType) => {
   const productOnCart = cart.find((elem) => elem.product === product);
   let updatedCart;
 
@@ -49,3 +55,14 @@ export const removeItemFromCart = (
 
   return updatedCart;
 };
+
+export function reducer(state: StateType, action: ActionType) {
+  if (action.type === "addToCart") {
+    return { cart: addItemToCart(state.cart, action.payload) };
+  }
+  if (action.type === "removeFromCart") {
+    return { cart: removeItemFromCart(state.cart, action.payload) };
+  }
+
+  return state;
+}

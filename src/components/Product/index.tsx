@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { CartContext, addItemToCart, removeItemFromCart } from "../../context";
+import { CartContext } from "../../context";
 import { ProductType } from "../../types";
 
 import styles from "./styles.module.scss";
@@ -13,11 +13,11 @@ export default function Product({ product }: Iprops) {
   const context = useContext(CartContext);
 
   const handleRemove = () => {
-    context.setCart(removeItemFromCart(context.cart, product));
+    context.dispatch({ type: "removeFromCart", payload: product });
   };
 
   const handleAdd = () => {
-    context.setCart(addItemToCart(context.cart, product));
+    context.dispatch({ type: "addToCart", payload: product });
   };
 
   return (
@@ -27,13 +27,13 @@ export default function Product({ product }: Iprops) {
         <p className={styles.title}>{product.title}</p>
         <p className={styles.description}>{product.description}</p>
       </div>
-      {context.cart.find((elem) => elem.product === product) ? (
+      {context.state.cart.find((elem) => elem.product === product) ? (
         <div className={styles.botonera}>
           <button className={styles.button} onClick={handleRemove}>
             -
           </button>
           <span className={styles.counter}>
-            {context.cart.find((elem) => elem.product === product)?.cant}
+            {context.state.cart.find((elem) => elem.product === product)?.cant}
           </span>
           <button className={styles.button} onClick={handleAdd}>
             +
