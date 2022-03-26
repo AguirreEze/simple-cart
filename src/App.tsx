@@ -14,7 +14,11 @@ function App() {
     api.list().then(setProducts);
   }, []);
 
-  const getProductPrice = (cartItem: CartItemType) => {
+  const getProctCant = (cart: CartItemType[]): number => {
+    return cart.reduce((a, b) => a + b.cant, 0);
+  };
+
+  const getProductPrice = (cartItem: CartItemType): number => {
     return cartItem.product.price * cartItem.cant;
   };
 
@@ -34,7 +38,8 @@ function App() {
       </CartContext.Provider>
       <aside className={styles.cart}>
         <button>
-          {state.cart.length} productos (total: ${getFinalPrice(state.cart)})
+          {getProctCant(state.cart)} productos (total: $
+          {getFinalPrice(state.cart)})
         </button>
       </aside>
       <footer className={styles.footer}>
